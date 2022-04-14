@@ -23,7 +23,7 @@ export class TrelloComment extends Model<TrelloComment, CommentCreationAttr> {
     example: 'Some comments for card',
     description: 'Comment for card',
   })
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   comment: string;
 
   @ForeignKey(() => Card)

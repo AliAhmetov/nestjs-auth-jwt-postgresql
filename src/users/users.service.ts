@@ -13,12 +13,17 @@ export class UsersService {
   }
 
   async getAllUsers() {
-    const users = this.userRepository.findAll({ include: { all: true } });
+    const users = this.userRepository.findAll({
+      attributes: ['id', 'email'],
+      include: { all: true },
+    });
     return users;
   }
 
   async getUserByEmail(email: string) {
-    const user = this.userRepository.findOne({ where: { email } });
+    const user = this.userRepository.findOne({
+      where: { email: email },
+    });
     return user;
   }
 }

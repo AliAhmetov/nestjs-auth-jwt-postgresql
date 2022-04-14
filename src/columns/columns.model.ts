@@ -20,7 +20,7 @@ export class TrelloColumn extends Model<TrelloColumn, ColumnCreationAttr> {
   })
   id: number;
   @ApiProperty({ example: 'To Do', description: 'Name of column' })
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   name: string;
 
   @ForeignKey(() => User)

@@ -20,7 +20,7 @@ export class Card extends Model<Card, CardCreationAttr> {
   })
   id: number;
   @ApiProperty({ example: 'My card', description: 'Name of card' })
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   name: string;
 
   @ForeignKey(() => TrelloColumn)
