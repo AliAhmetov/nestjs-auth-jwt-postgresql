@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
 import { User } from './users/users.model';
 import { ColumnsModule } from './columns/columns.module';
 import { CardsModule } from './cards/cards.module';
@@ -10,23 +9,25 @@ import { TrelloColumn } from './columns/columns.model';
 import { AuthModule } from './auth/auth.module';
 import { Card } from './cards/cards.model';
 import { APP_GUARD } from '@nestjs/core';
+import ConfigModule from './config/config.module';
+import { ConfigService } from './config/config.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { OwnerCardsGuard } from './cards/owner-cards.guard';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`,
-    }),
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      models: [User, TrelloColumn, Card],
-      autoLoadModels: true,
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        dialect: 'postgres',
+        host: configService.get('POSTGRES_HOST'),
+        port: Number(configService.get('POSTGRES_PORT')),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
+        models: [User, TrelloColumn, Card],
+        autoLoadModels: true,
+      }),
+      inject: [ConfigService],
     }),
     UsersModule,
     ColumnsModule,
