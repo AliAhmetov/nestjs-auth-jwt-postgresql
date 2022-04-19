@@ -3,18 +3,15 @@ import { InjectModel } from '@nestjs/sequelize';
 import { TrelloColumn } from './columns.model';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ColumnsService {
   constructor(
     @InjectModel(TrelloColumn) private columnRepository: typeof TrelloColumn,
-    @Inject(REQUEST) private readonly request: Request,
   ) {}
 
-  async createColumn(dto: CreateColumnDto) {
-    const user_id = this.request['user'].id;
+  async createColumn(req: any, dto: CreateColumnDto) {
+    const user_id = req.user.id;
     const column = await this.columnRepository.create({
       ...dto,
       user_id: user_id,

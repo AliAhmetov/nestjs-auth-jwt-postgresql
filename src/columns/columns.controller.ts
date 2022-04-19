@@ -5,8 +5,8 @@ import {
   Get,
   Param,
   Post,
-  Put,
-  UseGuards,
+  Put, Req,
+  UseGuards
 } from '@nestjs/common';
 import { ColumnsService } from './columns.service';
 import { CreateColumnDto } from './dto/create-column.dto';
@@ -23,8 +23,8 @@ export class ColumnsController {
   @ApiOperation({ summary: 'Creating column' })
   @ApiResponse({ status: 200, type: TrelloColumn })
   @Post()
-  create(@Body() dto: CreateColumnDto) {
-    return this.columnService.createColumn(dto);
+  create(@Req() req, @Body() dto: CreateColumnDto) {
+    return this.columnService.createColumn(req, dto);
   }
 
   @ApiOperation({ summary: 'Get column by id' })
